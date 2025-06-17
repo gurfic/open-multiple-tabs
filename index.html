@@ -19,7 +19,16 @@
       width: 100%;
       max-width: 700px;
       margin: 0 auto;
-      /* Align with grid width below */
+    }
+    .url-toolbar {
+      width: 100%;
+      display: flex;
+      flex-direction: row;
+      align-items: center;
+      justify-content: flex-end;
+      gap: 8px;
+      margin-bottom: 14px;
+      box-sizing: border-box;
     }
     .url-grid-header {
       display: flex;
@@ -145,15 +154,15 @@
 <body>
   <div class="spacer"></div>
   <div class="url-grid-container">
+    <div class="url-toolbar">
+      <button class="btn-blue" onclick="addUrl()">Add URL</button>
+      <button class="btn-green" onclick="saveUrls()">Save URLs</button>
+    </div>
     <div class="url-grid-header">
       <div class="action-group-left">
         <button class="btn-blue" onclick="openTabs()">Open URLs</button>
         <button class="btn-grey" onclick="selectAll()">Select All</button>
         <button class="btn-grey" onclick="unselectAll()">Unselect All</button>
-      </div>
-      <div class="action-group-right">
-        <button class="btn-blue" onclick="addUrl()">Add URL</button>
-        <button class="btn-green" onclick="saveUrls()">Save URLs</button>
       </div>
     </div>
     <div id="urlGrid" class="url-grid"></div>
