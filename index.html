@@ -24,12 +24,40 @@
     button:hover {
       background-color: #0056b3;
     }
+    .url-grid-container {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      justify-content: flex-start;
+      width: 100%;
+      max-width: 900px;
+      margin: 0 auto;
+    }
+    .url-grid-header {
+      display: flex;
+      gap: 8px;
+      margin-bottom: 18px;
+      margin-top: 0;
+    }
+    .select-btn {
+      background-color: #888888;
+      color: #fff;
+      font-size: 16px;
+      border: none;
+      border-radius: 6px;
+      padding: 8px 18px;
+      margin: 0 8px 0 0;
+      cursor: pointer;
+    }
+    .select-btn:hover {
+      background-color: #444444;
+    }
     .url-grid {
       display: flex;
       flex-wrap: wrap;
       justify-content: center;
-      margin-top: 30px;
       gap: 8px;
+      width: 100%;
     }
     .url-item {
       background: #fff;
@@ -52,29 +80,23 @@
       border-radius: 3px;
       margin-right: 6px;
     }
-    .select-btn {
-      background-color: #888888;
-      color: #fff;
-      font-size: 16px;
-      border: none;
-      border-radius: 6px;
-      padding: 8px 18px;
-      margin: 5px;
-      cursor: pointer;
-    }
-    .select-btn:hover {
-      background-color: #444444;
+    /* Ensure vertical spacing between Open URLs and grid section */
+    .spacer {
+      height: 36px;
     }
   </style>
 </head>
 <body>
   <p>Click the button below to open your selected sites in new tabs (same browser).</p>
   <button onclick="openTabs()">Open URLs</button>
-  <br />
-  <button class="select-btn" onclick="selectAll()">Select All</button>
-  <button class="select-btn" onclick="unselectAll()">Unselect All</button>
-  <div id="urlGrid" class="url-grid"></div>
-
+  <div class="spacer"></div>
+  <div class="url-grid-container">
+    <div class="url-grid-header">
+      <button class="select-btn" onclick="selectAll()">Select All</button>
+      <button class="select-btn" onclick="unselectAll()">Unselect All</button>
+    </div>
+    <div id="urlGrid" class="url-grid"></div>
+  </div>
   <script>
     // Initial URLs
     let urls = [
