@@ -18,13 +18,22 @@
                 "https://www.funda.nl/zoeken/kaart/huur?selected_area=%5B%22den-haag%22%5D"
             ];
 
-            // Loop through URLs and open each one with a delay to avoid pop-up blockers
+            // Variable to hold window references
+            let windows = [];
+
+            // Loop through URLs and open each one with a delay
             urls.forEach((url, index) => {
                 setTimeout(() => {
-                    const newWin = window.open(url, '_blank', 'noopener');
-                    if (newWin) newWin.opener = null;
-                }, index * 500); // Delay of 500ms between each URL open
+                    let newWin = window.open(url, '_blank', 'noopener');
+                    if (newWin) {
+                        newWin.opener = null; // Prevent window manipulation for security reasons
+                        windows.push(newWin); // Track the window references (useful for debugging)
+                    }
+                }, index * 500); // Delay of 500ms between each URL
             });
+
+            // For debugging purposes, log opened windows (in case something goes wrong)
+            console.log(windows);
         }
     </script>
 
