@@ -72,6 +72,11 @@
     .spacer {
       height: 36px;
     }
+    .utility-btns {
+      display: flex;
+      gap: 8px;
+      margin-bottom: 18px;
+    }
   </style>
 </head>
 <body>
@@ -81,12 +86,17 @@
       <button class="action-btn" onclick="openTabs()">Open URLs</button>
       <button class="action-btn" onclick="selectAll()">Select All</button>
       <button class="action-btn" onclick="unselectAll()">Unselect All</button>
+      <button class="action-btn" onclick="addUrl()">Add URL</button>
+      <button class="action-btn" onclick="saveUrls()">Save URLs</button>
     </div>
     <div id="urlGrid" class="url-grid"></div>
   </div>
   <script>
+    // Helper for persistence
+    const LOCAL_STORAGE_KEY = "multi_urls_list";
+
     // Initial URLs
-    let urls = [
+    let initialUrls = [
       "https://www.pararius.com/appartamenti/den-haag/800-2000",
       "https://www.funda.nl/zoeken/kaart/huur?selected_area=%5B%22den-haag%22%5D",
       "https://www.rentalrotterdam.nl/woningaanbod/huur/den-haag?locationofinterest=Den%20Haag&moveunavailablelistingstothebottom=true&pricerange.maxprice=2000",
@@ -94,6 +104,23 @@
       "https://www.doenmakelaars.com/nl/woningaanbod/huur?salesRentals=rentals#{%22view%22:%22grid%22,%22sort%22:%22addedDesc%22,%22searchTerms%22:[%22address%22,%22zipcode%22,%22city%22,%22state%22],%22address%22:%22%22,%22title%22:%22%22,%22salesRentals%22:%22rentals%22,%22salesPriceMin%22:0,%22salesPriceMax%22:9999999999,%22devSalesPriceMin%22:0,%22devSalesPriceMax%22:9999999999,%22rentalsPriceMin%22:0,%22rentalsPriceMax%22:2000,%22devRentalsPriceMin%22:0,%22devRentalsPriceMax%22:9999999999,%22surfaceMin%22:0,%22surfaceMax%22:9999999999,%22unitsMin%22:0,%22unitsMax%22:9999999999,%22devSurfaceMin%22:0,%22devSurfaceMax%22:9999999999,%22plotSurfaceMin%22:0,%22plotSurfaceMax%22:9999999999,%22roomsMin%22:0,%22roomsMax%22:9999999999,%22bedroomsMin%22:0,%22bedroomsMax%22:9999999999,%22bathroomsMin%22:0,%22bathroomsMax%22:9999999999,%22city%22:[%22Den%20Haag%22],%22district%22:[],%22mainType%22:[],%22buildType%22:[],%22tag%22:[],%22country%22:[],%22state%22:[],%22listingsType%22:[],%22ignoreType%22:[],%22categories%22:[],%22status%22:%22available%22,%22statusStrict%22:false,%22includeIsBought%22:false,%22user%22:%22%22,%22branch%22:%22%22,%22apartmentType%22:%22%22,%22houseType%22:%22%22,%22archiveTime%22:604800,%22page%22:1,%22grouped%22:true}",
       "https://woonzeker.com/aanbod/s-gravenhage?page=1&filter=location:Den+Haag|price:150-2010"
     ];
+
+    // Load from localStorage if present
+    let urls = [];
+    if (localStorage.getItem(LOCAL_STORAGE_KEY)) {
+      try {
+        const stored = JSON.parse(localStorage.getItem(LOCAL_STORAGE_KEY));
+        if (Array.isArray(stored)) {
+          urls = stored;
+        } else {
+          urls = [...initialUrls];
+        }
+      } catch {
+        urls = [...initialUrls];
+      }
+    } else {
+      urls = [...initialUrls];
+    }
 
     // Which URLs are selected
     let selected = Array(urls.length).fill(true);
@@ -145,6 +172,20 @@
     function unselectAll() {
       selected = Array(urls.length).fill(false);
       renderGrid();
+    }
+
+    function addUrl() {
+      urls.push('');
+      selected.push(true);
+      renderGrid();
+    }
+
+    function saveUrls() {
+      // Save to localStorage
+      localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(urls));
+      // Also update initialUrls in memory for future reloads (for user clarity, not needed for persistence)
+      initialUrls = [...urls];
+      alert('URLs saved!');
     }
 
     // Initial render
