@@ -1,8 +1,8 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Open Multiple Tabs</title>
   <style>
     body {
@@ -27,7 +27,7 @@
 </head>
 <body>
   <h2>Open Multiple Tabs</h2>
-  <p>Click the button below to open your selected sites in new tabs.</p>
+  <p>Click the button below to open your selected sites in new tabs (same browser).</p>
   <button onclick="openTabs()">Open Tabs</button>
 
   <script>
@@ -38,10 +38,10 @@
       ];
 
       urls.forEach(url => {
-        window.open(url, '_blank');
+        const newWin = window.open(url, '_blank', 'noopener');
+        if (newWin) newWin.opener = null;
       });
     }
   </script>
 </body>
 </html>
-
