@@ -79,6 +79,20 @@
     .btn-green:hover {
       background-color: #1e7e34;
     }
+    /* Red Remove Button */
+    .btn-red {
+      padding: 6px 16px;
+      font-size: 14px;
+      background-color: #dc3545;
+      color: white;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+      margin-left: 6px;
+    }
+    .btn-red:hover {
+      background-color: #a71d2a;
+    }
     .url-grid {
       display: flex;
       flex-wrap: wrap;
@@ -186,8 +200,17 @@
           urls[i] = input.value;
         };
 
+        // Remove button
+        const removeBtn = document.createElement('button');
+        removeBtn.textContent = 'Remove';
+        removeBtn.className = 'btn-red';
+        removeBtn.onclick = () => {
+          removeUrl(i);
+        };
+
         div.appendChild(checkbox);
         div.appendChild(input);
+        div.appendChild(removeBtn);
         grid.appendChild(div);
       });
     }
@@ -215,6 +238,7 @@
       urls.push('');
       selected.push(true);
       renderGrid();
+      saveUrls(); // Save after adding so it's also persistent
     }
 
     function saveUrls() {
@@ -223,6 +247,13 @@
       // Also update initialUrls in memory for future reloads (for user clarity, not needed for persistence)
       initialUrls = [...urls];
       alert('URLs saved!');
+    }
+
+    function removeUrl(index) {
+      urls.splice(index, 1);
+      selected.splice(index, 1);
+      renderGrid();
+      saveUrls(); // Save after removal so it's persistent
     }
 
     // Initial render
