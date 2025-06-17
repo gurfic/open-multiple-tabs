@@ -19,47 +19,52 @@
       border: none;
       border-radius: 6px;
       cursor: pointer;
-      margin-bottom: 24px;
+      margin: 5px;
     }
     button:hover {
       background-color: #0056b3;
     }
     .url-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
-      gap: 16px;
-      max-width: 900px;
-      margin: 0 auto;
-      margin-top: 24px;
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      margin-top: 30px;
+      gap: 8px;
     }
     .url-item {
       background: #fff;
-      border-radius: 8px;
-      padding: 16px 12px;
-      box-shadow: 0 2px 8px rgba(0,0,0,0.07);
+      border: 1px solid #ddd;
+      border-radius: 6px;
+      padding: 10px 16px;
+      min-width: 320px;
       display: flex;
-      align-items: flex-start;
+      align-items: center;
       gap: 10px;
-      word-break: break-all;
-      font-size: 15px;
-      text-align: left;
     }
-    .url-checkbox {
-      margin-top: 3px;
-      flex-shrink: 0;
+    .url-item input[type="checkbox"] {
+      transform: scale(1.2);
     }
-    .url-label {
+    .url-item input[type="text"] {
       flex: 1;
+      padding: 4px 8px;
+      font-size: 14px;
+      border: 1px solid #ccc;
+      border-radius: 3px;
+      margin-right: 6px;
     }
+    /* Remove styles for .remove-btn and .add-btn as they are no longer used */
   </style>
 </head>
 <body>
   <h2>Open Multiple Tabs</h2>
-  <p>Check the sites you want to open, then click "Open Tabs".</p>
-  <button onclick="openTabs()">Open Tabs</button>
-  <div class="url-grid" id="urlGrid"></div>
+  <p>Click the button below to open your selected sites in new tabs (same browser).</p>
+  <button onclick="openTabs()">Open Selected Tabs</button>
+  <br />
+  <div id="urlGrid" class="url-grid"></div>
+
   <script>
-    const urls = [
+    // Initial URLs
+    let urls = [
       "https://www.pararius.com/appartamenti/den-haag/800-2000",
       "https://www.funda.nl/zoeken/kaart/huur?selected_area=%5B%22den-haag%22%5D",
       "https://www.rentalrotterdam.nl/woningaanbod/huur/den-haag?locationofinterest=Den%20Haag&moveunavailablelistingstothebottom=true&pricerange.maxprice=2000",
@@ -68,31 +73,50 @@
       "https://woonzeker.com/aanbod/s-gravenhage?page=1&filter=location:Den+Haag|price:150-2010"
     ];
 
-    function renderUrlGrid() {
-      const grid = document.getElementById('urlGrid');
-      if (!grid) return;
-      grid.innerHTML = urls
-        .map((url, idx) => `
-          <div class="url-item">
-            <input class="url-checkbox" type="checkbox" id="url${idx}" data-url="${url}" checked>
-            <label class="url-label" for="url${idx}">
-              <a href="${url}" target="_blank" rel="noopener">${url}</a>
-            </label>
-          </div>
-        `)
-        .join('');
-    }
+    // Which URLs are selected
+    let selected = Array(urls.length).fill(true);
 
-    function openTabs() {
-      document.querySelectorAll('.url-checkbox:checked').forEach(checkbox => {
-        const url = checkbox.getAttribute('data-url');
-        const newWin = window.open(url, '_blank', 'noopener');
-        if (newWin) newWin.opener = null;
+    function renderGrid() {
+      const grid = document.getElementById('urlGrid');
+      grid.innerHTML = '';
+      urls.forEach((url, i) => {
+        const div = document.createElement('div');
+        div.className = 'url-item';
+
+        // Checkbox
+        const checkbox = document.createElement('input');
+        checkbox.type = 'checkbox';
+        checkbox.checked = selected[i];
+        checkbox.onchange = () => {
+          selected[i] = checkbox.checked;
+        };
+
+        // Editable text input
+        const input = document.createElement('input');
+        input.type = 'text';
+        input.value = url;
+        input.size = 42;
+        input.onchange = () => {
+          urls[i] = input.value;
+        };
+
+        div.appendChild(checkbox);
+        div.appendChild(input);
+        grid.appendChild(div);
       });
     }
 
-    // Ensures the DOM is loaded before rendering the grid
-    window.onload = renderUrlGrid;
+    function openTabs() {
+      urls.forEach((url, i) => {
+        if (selected[i]) {
+          const newWin = window.open(url, '_blank', 'noopener');
+          if (newWin) newWin.opener = null;
+        }
+      });
+    }
+
+    // Initial render
+    renderGrid();
   </script>
 </body>
 </html>
