@@ -23,25 +23,76 @@
     button:hover {
       background-color: #0056b3;
     }
+    #warning {
+      color: red;
+      font-weight: bold;
+      margin-top: 20px;
+    }
+    a.browser-link {
+      display: inline-block;
+      margin-top: 15px;
+      color: #007bff;
+      text-decoration: underline;
+    }
   </style>
 </head>
 <body>
   <h2>Open Multiple Tabs</h2>
-  <p>Click the button below to open your selected sites in new tabs (same browser).</p>
+  <p>Click the button below to open your selected sites in new tabs.</p>
   <button onclick="openTabs()">Open Tabs</button>
 
+  <p id="warning" style="display:none;">⚠️ Please open this page in your default browser (e.g., Chrome or Safari) for it to work properly.</p>
+
+  <!-- Fallback manual link to reopen in default browser -->
+  <a class="browser-link" href="#" onclick="openInBrowser(event)">Open this page in your browser</a>
+
+  <!-- Optional: Android intent link -->
+  <p>
+    <a class="browser-link" href="intent://yourdomain.com/open-tabs#Intent;scheme=https;package=com.android.chrome;end">
+      Open with Chrome (Android only)
+    </a>
+  </p>
+
   <script>
+    function isInAppBrowser() {
+      const ua = navigator.userAgent || "";
+      return /WhatsApp|FBAN|FBAV|Instagram|Line|wv/.test(ua);
+    }
+
     function openTabs() {
       const urls = [
         "https://www.pararius.com/appartamenti/den-haag/800-2000",
         "https://www.funda.nl/zoeken/kaart/huur?selected_area=%5B%22den-haag%22%5D"
       ];
 
+      let allOpened = true;
+
       urls.forEach(url => {
-        const newWin = window.open(url, '_blank', 'noopener');
-        if (newWin) newWin.opener = null;
+        const win = window.open(url, '_blank', 'noopener');
+        if (win) {
+          win.opener = null;
+        } else {
+          allOpened = false;
+        }
       });
+
+      if (!allOpened || isInAppBrowser()) {
+        document.getElementById('warning').style.display = 'block';
+      }
     }
+
+    function openInBrowser(event) {
+      event.preventDefault();
+      const currentUrl = window.location.href;
+      window.open(currentUrl, '_blank');
+    }
+
+    // Auto-show warning if opened in WhatsApp or similar
+    window.onload = function () {
+      if (isInAppBrowser()) {
+        document.getElementById('warning').style.display = 'block';
+      }
+    };
   </script>
 </body>
 </html>
