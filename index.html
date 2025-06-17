@@ -23,6 +23,23 @@
     button:hover {
       background-color: #0056b3;
     }
+    .url-list {
+      margin-top: 30px;
+      text-align: left;
+      max-width: 800px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+    .url-list a {
+      display: block;
+      margin-bottom: 10px;
+      color: #007bff;
+      text-decoration: none;
+      word-break: break-all;
+    }
+    .url-list a:hover {
+      text-decoration: underline;
+    }
   </style>
 </head>
 <body>
@@ -30,22 +47,35 @@
   <p>Click the button below to open your selected sites in new tabs (same browser).</p>
   <button onclick="openTabs()">Open Tabs</button>
 
-  <script>
-    function openTabs() {
-      const urls = [
-        "https://www.pararius.com/appartamenti/den-haag/800-2000",
-        "https://www.funda.nl/zoeken/kaart/huur?selected_area=%5B%22den-haag%22%5D",
-        "https://www.rentalrotterdam.nl/woningaanbod/huur/den-haag?locationofinterest=Den%20Haag&moveunavailablelistingstothebottom=true&pricerange.maxprice=2000",
-        "https://livresidential.nl/huurwoningen?query=Den%20Haag&range%5Bprice%5D=500%3A2000",
-        "https://www.doenmakelaars.com/nl/woningaanbod/huur?salesRentals=rentals#{%22view%22:%22grid%22,%22sort%22:%22addedDesc%22,%22searchTerms%22:[%22address%22,%22zipcode%22,%22city%22,%22state%22],%22address%22:%22%22,%22title%22:%22%22,%22salesRentals%22:%22rentals%22,%22salesPriceMin%22:0,%22salesPriceMax%22:9999999999,%22devSalesPriceMin%22:0,%22devSalesPriceMax%22:9999999999,%22rentalsPriceMin%22:0,%22rentalsPriceMax%22:2000,%22devRentalsPriceMin%22:0,%22devRentalsPriceMax%22:9999999999,%22surfaceMin%22:0,%22surfaceMax%22:9999999999,%22unitsMin%22:0,%22unitsMax%22:9999999999,%22devSurfaceMin%22:0,%22devSurfaceMax%22:9999999999,%22plotSurfaceMin%22:0,%22plotSurfaceMax%22:9999999999,%22roomsMin%22:0,%22roomsMax%22:9999999999,%22bedroomsMin%22:0,%22bedroomsMax%22:9999999999,%22bathroomsMin%22:0,%22bathroomsMax%22:9999999999,%22city%22:[%22Den%20Haag%22],%22district%22:[],%22mainType%22:[],%22buildType%22:[],%22tag%22:[],%22country%22:[],%22state%22:[],%22listingsType%22:[],%22ignoreType%22:[],%22categories%22:[],%22status%22:%22available%22,%22statusStrict%22:false,%22includeIsBought%22:false,%22user%22:%22%22,%22branch%22:%22%22,%22apartmentType%22:%22%22,%22houseType%22:%22%22,%22archiveTime%22:604800,%22page%22:1,%22grouped%22:true}",
-        "https://woonzeker.com/aanbod/s-gravenhage?page=1&filter=location:Den+Haag|price:150-2010"
-      ];
+  <div class="url-list" id="urlList"></div>
 
+  <script>
+    const urls = [
+      "https://www.pararius.com/appartamenti/den-haag/800-2000",
+      "https://www.funda.nl/zoeken/kaart/huur?selected_area=%5B%22den-haag%22%5D",
+      "https://www.rentalrotterdam.nl/woningaanbod/huur/den-haag?locationofinterest=Den%20Haag&moveunavailablelistingstothebottom=true&pricerange.maxprice=2000",
+      "https://livresidential.nl/huurwoningen?query=Den%20Haag&range%5Bprice%5D=500%3A2000",
+      "https://www.doenmakelaars.com/nl/woningaanbod/huur?salesRentals=rentals#{%22view%22:%22grid%22,%22sort%22:%22addedDesc%22,...}", // shortened for readability
+      "https://woonzeker.com/aanbod/s-gravenhage?page=1&filter=location:Den+Haag|price:150-2010"
+    ];
+
+    function openTabs() {
       urls.forEach(url => {
         const newWin = window.open(url, '_blank', 'noopener');
         if (newWin) newWin.opener = null;
       });
     }
+
+    // Populate the list of links
+    const listContainer = document.getElementById("urlList");
+    urls.forEach(url => {
+      const link = document.createElement("a");
+      link.href = url;
+      link.target = "_blank";
+      link.rel = "noopener noreferrer";
+      link.textContent = url;
+      listContainer.appendChild(link);
+    });
   </script>
 </body>
 </html>
