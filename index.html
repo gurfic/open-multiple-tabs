@@ -78,6 +78,41 @@
     .add-btn:hover {
       background: #1e7e34;
     }
+    .select-btn {
+      background: #17a2b8;
+      color: #fff;
+      font-size: 15px;
+      border: none;
+      border-radius: 6px;
+      padding: 8px 18px;
+      margin-top: 10px;
+      margin-bottom: 5px;
+      cursor: pointer;
+    }
+    .select-btn:hover {
+      background: #11707a;
+    }
+    .deselect-btn {
+      background: #ffc107;
+      color: #333;
+      font-size: 15px;
+      border: none;
+      border-radius: 6px;
+      padding: 8px 18px;
+      margin-top: 10px;
+      margin-bottom: 5px;
+      cursor: pointer;
+    }
+    .deselect-btn:hover {
+      background: #e0a800;
+      color: #fff;
+    }
+    .btn-group {
+      margin: 10px 0 10px 0;
+      display: flex;
+      justify-content: center;
+      gap: 10px;
+    }
   </style>
 </head>
 <body>
@@ -86,6 +121,10 @@
   <button onclick="openTabs()">Open Selected Tabs</button>
   <br />
   <button class="add-btn" onclick="addUrl()">Add URL</button>
+  <div class="btn-group">
+    <button class="select-btn" onclick="selectAll()">Select All</button>
+    <button class="deselect-btn" onclick="deselectAll()">Deselect All</button>
+  </div>
   <div id="urlGrid" class="url-grid"></div>
 
   <script>
@@ -155,6 +194,16 @@
     function addUrl() {
       urls.push('');
       selected.push(true);
+      renderGrid();
+    }
+
+    function selectAll() {
+      selected = Array(urls.length).fill(true);
+      renderGrid();
+    }
+
+    function deselectAll() {
+      selected = Array(urls.length).fill(false);
       renderGrid();
     }
 
