@@ -1,214 +1,91 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Open Multiple Tabs</title>
-  <style>
-    body {
-      font-family: Arial, sans-serif;
-      padding: 40px;
-      text-align: center;
-      background-color: #f5f5f5;
-    }
-    button {
-      padding: 12px 24px;
-      font-size: 16px;
-      background-color: #007bff;
-      color: white;
-      border: none;
-      border-radius: 6px;
-      cursor: pointer;
-      margin: 5px;
-    }
-    button:hover {
-      background-color: #0056b3;
-    }
-    .url-grid {
-      display: flex;
-      flex-wrap: wrap;
-      justify-content: center;
-      margin-top: 30px;
-      gap: 8px;
-    }
-    .url-item {
-      background: #fff;
-      border: 1px solid #ddd;
-      border-radius: 6px;
-      padding: 10px 16px;
-      min-width: 320px;
-      display: flex;
-      align-items: center;
-      gap: 10px;
-    }
-    .url-item input[type="checkbox"] {
-      transform: scale(1.2);
-    }
-    .url-item input[type="text"] {
-      flex: 1;
-      padding: 4px 8px;
-      font-size: 14px;
-      border: 1px solid #ccc;
-      border-radius: 3px;
-      margin-right: 6px;
-    }
-    .url-item .remove-btn {
-      background: #dc3545;
-      color: #fff;
-      font-size: 14px;
-      border: none;
-      border-radius: 4px;
-      padding: 4px 10px;
-      cursor: pointer;
-    }
-    .url-item .remove-btn:hover {
-      background: #a71d2a;
-    }
-    .add-btn {
-      background: #28a745;
-      color: #fff;
-      font-size: 16px;
-      border: none;
-      border-radius: 6px;
-      padding: 8px 18px;
-      margin-top: 20px;
-      margin-bottom: 20px;
-      cursor: pointer;
-    }
-    .add-btn:hover {
-      background: #1e7e34;
-    }
-    .select-btn {
-      background: #17a2b8;
-      color: #fff;
-      font-size: 15px;
-      border: none;
-      border-radius: 6px;
-      padding: 8px 18px;
-      margin-top: 10px;
-      margin-bottom: 5px;
-      cursor: pointer;
-    }
-    .select-btn:hover {
-      background: #11707a;
-    }
-    .deselect-btn {
-      background: #ffc107;
-      color: #333;
-      font-size: 15px;
-      border: none;
-      border-radius: 6px;
-      padding: 8px 18px;
-      margin-top: 10px;
-      margin-bottom: 5px;
-      cursor: pointer;
-    }
-    .deselect-btn:hover {
-      background: #e0a800;
-      color: #fff;
-    }
-    .btn-group {
-      margin: 10px 0 10px 0;
-      display: flex;
-      justify-content: center;
-      gap: 10px;
-    }
-  </style>
-</head>
-<body>
-  <h2>Open Multiple Tabs</h2>
-  <p>Click the button below to open your selected sites in new tabs (same browser).</p>
-  <button onclick="openTabs()">Open Selected Tabs</button>
-  <br />
-  <button class="add-btn" onclick="addUrl()">Add URL</button>
-  <div class="btn-group">
-    <button class="select-btn" onclick="selectAll()">Select All</button>
-    <button class="deselect-btn" onclick="deselectAll()">Deselect All</button>
-  </div>
-  <div id="urlGrid" class="url-grid"></div>
+<!-- ... keep your existing HTML, just update the script part ... -->
+<script>
+  // Hard-coded defaults
+  const defaultUrls = [
+    "https://www.pararius.com/appartamenti/den-haag/800-2000",
+    "https://www.funda.nl/zoeken/kaart/huur?selected_area=%5B%22den-haag%22%5D",
+    "https://www.rentalrotterdam.nl/woningaanbod/huur/den-haag?locationofinterest=Den%20Haag&moveunavailablelistingstothebottom=true&pricerange.maxprice=2000",
+    "https://livresidential.nl/huurwoningen?query=Den%20Haag&range%5Bprice%5D=500%3A2000",
+    "https://www.doenmakelaars.com/nl/woningaanbod/huur?salesRentals=rentals#{%22view%22:%22grid%22,%22sort%22:%22addedDesc%22,%22searchTerms%22:[%22address%22,%22zipcode%22,%22city%22,%22state%22],%22address%22:%22%22,%22title%22:%22%22,%22salesRentals%22:%22rentals%22,%22salesPriceMin%22:0,%22salesPriceMax%22:9999999999,%22devSalesPriceMin%22:0,%22devSalesPriceMax%22:9999999999,%22rentalsPriceMin%22:0,%22rentalsPriceMax%22:2000,%22devRentalsPriceMin%22:0,%22devRentalsPriceMax%22:9999999999,%22surfaceMin%22:0,%22surfaceMax%22:9999999999,%22unitsMin%22:0,%22unitsMax%22:9999999999,%22devSurfaceMin%22:0,%22devSurfaceMax%22:9999999999,%22plotSurfaceMin%22:0,%22plotSurfaceMax%22:9999999999,%22roomsMin%22:0,%22roomsMax%22:9999999999,%22bedroomsMin%22:0,%22bedroomsMax%22:9999999999,%22bathroomsMin%22:0,%22bathroomsMax%22:9999999999,%22city%22:[%22Den%20Haag%22],%22district%22:[],%22mainType%22:[],%22buildType%22:[],%22tag%22:[],%22country%22:[],%22state%22:[],%22listingsType%22:[],%22ignoreType%22:[],%22categories%22:[],%22status%22:%22available%22,%22statusStrict%22:false,%22includeIsBought%22:false,%22user%22:%22%22,%22branch%22:%22%22,%22apartmentType%22:%22%22,%22houseType%22:%22%22,%22archiveTime%22:604800,%22page%22:1,%22grouped%22:true}",
+    "https://woonzeker.com/aanbod/s-gravenhage?page=1&filter=location:Den+Haag|price:150-2010"
+  ];
 
-  <script>
-    // Initial URLs
-    let urls = [
-      "https://www.pararius.com/appartamenti/den-haag/800-2000",
-      "https://www.funda.nl/zoeken/kaart/huur?selected_area=%5B%22den-haag%22%5D",
-      "https://www.rentalrotterdam.nl/woningaanbod/huur/den-haag?locationofinterest=Den%20Haag&moveunavailablelistingstothebottom=true&pricerange.maxprice=2000",
-      "https://livresidential.nl/huurwoningen?query=Den%20Haag&range%5Bprice%5D=500%3A2000",
-      "https://www.doenmakelaars.com/nl/woningaanbod/huur?salesRentals=rentals#{%22view%22:%22grid%22,%22sort%22:%22addedDesc%22,%22searchTerms%22:[%22address%22,%22zipcode%22,%22city%22,%22state%22],%22address%22:%22%22,%22title%22:%22%22,%22salesRentals%22:%22rentals%22,%22salesPriceMin%22:0,%22salesPriceMax%22:9999999999,%22devSalesPriceMin%22:0,%22devSalesPriceMax%22:9999999999,%22rentalsPriceMin%22:0,%22rentalsPriceMax%22:2000,%22devRentalsPriceMin%22:0,%22devRentalsPriceMax%22:9999999999,%22surfaceMin%22:0,%22surfaceMax%22:9999999999,%22unitsMin%22:0,%22unitsMax%22:9999999999,%22devSurfaceMin%22:0,%22devSurfaceMax%22:9999999999,%22plotSurfaceMin%22:0,%22plotSurfaceMax%22:9999999999,%22roomsMin%22:0,%22roomsMax%22:9999999999,%22bedroomsMin%22:0,%22bedroomsMax%22:9999999999,%22bathroomsMin%22:0,%22bathroomsMax%22:9999999999,%22city%22:[%22Den%20Haag%22],%22district%22:[],%22mainType%22:[],%22buildType%22:[],%22tag%22:[],%22country%22:[],%22state%22:[],%22listingsType%22:[],%22ignoreType%22:[],%22categories%22:[],%22status%22:%22available%22,%22statusStrict%22:false,%22includeIsBought%22:false,%22user%22:%22%22,%22branch%22:%22%22,%22apartmentType%22:%22%22,%22houseType%22:%22%22,%22archiveTime%22:604800,%22page%22:1,%22grouped%22:true}",
-      "https://woonzeker.com/aanbod/s-gravenhage?page=1&filter=location:Den+Haag|price:150-2010"
-    ];
+  // Load from localStorage, or use defaults
+  let urls = JSON.parse(localStorage.getItem('multiTabsUrls')) || [...defaultUrls];
+  let selected = Array(urls.length).fill(true);
 
-    // Which URLs are selected
-    let selected = Array(urls.length).fill(true);
+  function saveUrls() {
+    localStorage.setItem('multiTabsUrls', JSON.stringify(urls));
+  }
 
-    function renderGrid() {
-      const grid = document.getElementById('urlGrid');
-      grid.innerHTML = '';
-      urls.forEach((url, i) => {
-        const div = document.createElement('div');
-        div.className = 'url-item';
+  function renderGrid() {
+    const grid = document.getElementById('urlGrid');
+    grid.innerHTML = '';
+    urls.forEach((url, i) => {
+      const div = document.createElement('div');
+      div.className = 'url-item';
 
-        // Checkbox
-        const checkbox = document.createElement('input');
-        checkbox.type = 'checkbox';
-        checkbox.checked = selected[i];
-        checkbox.onchange = () => {
-          selected[i] = checkbox.checked;
-        };
+      // Checkbox
+      const checkbox = document.createElement('input');
+      checkbox.type = 'checkbox';
+      checkbox.checked = selected[i];
+      checkbox.onchange = () => {
+        selected[i] = checkbox.checked;
+      };
 
-        // Editable text input
-        const input = document.createElement('input');
-        input.type = 'text';
-        input.value = url;
-        input.size = 42;
-        input.onchange = () => {
-          urls[i] = input.value;
-        };
+      // Editable text input
+      const input = document.createElement('input');
+      input.type = 'text';
+      input.value = url;
+      input.size = 42;
+      input.onchange = () => {
+        urls[i] = input.value;
+        saveUrls();
+      };
 
-        // Remove button
-        const removeBtn = document.createElement('button');
-        removeBtn.textContent = 'Remove';
-        removeBtn.className = 'remove-btn';
-        removeBtn.onclick = () => {
-          urls.splice(i, 1);
-          selected.splice(i, 1);
-          renderGrid();
-        };
+      // Remove button
+      const removeBtn = document.createElement('button');
+      removeBtn.textContent = 'Remove';
+      removeBtn.className = 'remove-btn';
+      removeBtn.onclick = () => {
+        urls.splice(i, 1);
+        selected.splice(i, 1);
+        saveUrls();
+        renderGrid();
+      };
 
-        div.appendChild(checkbox);
-        div.appendChild(input);
-        div.appendChild(removeBtn);
-        grid.appendChild(div);
-      });
-    }
+      div.appendChild(checkbox);
+      div.appendChild(input);
+      div.appendChild(removeBtn);
+      grid.appendChild(div);
+    });
+  }
 
-    function openTabs() {
-      urls.forEach((url, i) => {
-        if (selected[i]) {
-          const newWin = window.open(url, '_blank', 'noopener');
-          if (newWin) newWin.opener = null;
-        }
-      });
-    }
+  function openTabs() {
+    urls.forEach((url, i) => {
+      if (selected[i]) {
+        const newWin = window.open(url, '_blank', 'noopener');
+        if (newWin) newWin.opener = null;
+      }
+    });
+  }
 
-    function addUrl() {
-      urls.push('');
-      selected.push(true);
-      renderGrid();
-    }
-
-    function selectAll() {
-      selected = Array(urls.length).fill(true);
-      renderGrid();
-    }
-
-    function deselectAll() {
-      selected = Array(urls.length).fill(false);
-      renderGrid();
-    }
-
-    // Initial render
+  function addUrl() {
+    urls.push('');
+    selected.push(true);
+    saveUrls();
     renderGrid();
-  </script>
-</body>
-</html>
+  }
+
+  // Optional: reset to defaults
+  function resetUrls() {
+    urls = [...defaultUrls];
+    selected = Array(urls.length).fill(true);
+    saveUrls();
+    renderGrid();
+  }
+
+  // Initial render
+  renderGrid();
+</script>
+<!-- Optionally: <button onclick="resetUrls()">Reset to Default URLs</button> -->
