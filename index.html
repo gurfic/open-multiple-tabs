@@ -17,8 +17,9 @@
       align-items: flex-start;
       justify-content: flex-start;
       width: 100%;
-      max-width: 900px;
+      max-width: 700px;
       margin: 0 auto;
+      /* Align with grid width below */
     }
     .url-grid-header {
       display: flex;
@@ -29,6 +30,7 @@
       gap: 8px;
       margin-bottom: 18px;
       margin-top: 0;
+      box-sizing: border-box;
     }
     .action-group-left,
     .action-group-right {
@@ -93,22 +95,25 @@
     .btn-red:hover {
       background-color: #a71d2a;
     }
+    /* 2-column grid */
     .url-grid {
-      display: flex;
-      flex-wrap: wrap;
-      justify-content: center;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
       gap: 8px;
       width: 100%;
+      box-sizing: border-box;
     }
     .url-item {
       background: #fff;
       border: 1px solid #ddd;
       border-radius: 6px;
       padding: 10px 16px;
-      min-width: 320px;
+      min-width: 0;
       display: flex;
       align-items: center;
       gap: 10px;
+      box-sizing: border-box;
+      width: 100%;
     }
     .url-item input[type="checkbox"] {
       transform: scale(1.2);
@@ -120,9 +125,20 @@
       border: 1px solid #ccc;
       border-radius: 3px;
       margin-right: 6px;
+      min-width: 0;
     }
     .spacer {
       height: 36px;
+    }
+    @media (max-width: 900px) {
+      .url-grid-container {
+        max-width: 98vw;
+      }
+    }
+    @media (max-width: 700px) {
+      .url-grid {
+        grid-template-columns: 1fr;
+      }
     }
   </style>
 </head>
@@ -246,7 +262,6 @@
       localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(urls));
       // Also update initialUrls in memory for future reloads (for user clarity, not needed for persistence)
       initialUrls = [...urls];
-      alert('URLs saved!');
     }
 
     function removeUrl(index) {
