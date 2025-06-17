@@ -1,41 +1,47 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Open Multiple Tabs</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Open Multiple Tabs</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      padding: 40px;
+      text-align: center;
+      background-color: #f5f5f5;
+    }
+    button {
+      padding: 12px 24px;
+      font-size: 16px;
+      background-color: #007bff;
+      color: white;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+    }
+    button:hover {
+      background-color: #0056b3;
+    }
+  </style>
 </head>
 <body>
+  <h2>Open Multiple Tabs</h2>
+  <p>Click the button below to open your selected sites in new tabs (same browser).</p>
+  <button onclick="openTabs()">Open Tabs</button>
 
-    <h1>Open Multiple Tabs</h1>
-    <button onclick="openTabs()">Open URLs</button>
+  <script>
+    function openTabs() {
+      const urls = [
+        "https://www.pararius.com/appartamenti/den-haag/800-2000",
+        "https://www.funda.nl/zoeken/kaart/huur?selected_area=%5B%22den-haag%22%5D"
+      ];
 
-    <script>
-        function openTabs() {
-            // List of URLs to open
-            const urls = [
-                "https://www.pararius.com/appartamenti/den-haag/800-2000",
-                "https://www.funda.nl/zoeken/kaart/huur?selected_area=%5B%22den-haag%22%5D"
-            ];
-
-            // Variable to hold window references
-            let windows = [];
-
-            // Loop through URLs and open each one with a delay
-            urls.forEach((url, index) => {
-                setTimeout(() => {
-                    let newWin = window.open(url, '_blank', 'noopener');
-                    if (newWin) {
-                        newWin.opener = null; // Prevent window manipulation for security reasons
-                        windows.push(newWin); // Track the window references (useful for debugging)
-                    }
-                }, index * 500); // Delay of 500ms between each URL
-            });
-
-            // For debugging purposes, log opened windows (in case something goes wrong)
-            console.log(windows);
-        }
-    </script>
-
+      urls.forEach(url => {
+        const newWin = window.open(url, '_blank', 'noopener');
+        if (newWin) newWin.opener = null;
+      });
+    }
+  </script>
 </body>
 </html>
