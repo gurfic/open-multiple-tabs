@@ -57,9 +57,7 @@
   <h2>Open Multiple Tabs</h2>
   <p>Check the sites you want to open, then click "Open Tabs".</p>
   <button onclick="openTabs()">Open Tabs</button>
-
   <div class="url-grid" id="urlGrid"></div>
-
   <script>
     const urls = [
       "https://www.pararius.com/appartamenti/den-haag/800-2000",
@@ -70,9 +68,9 @@
       "https://woonzeker.com/aanbod/s-gravenhage?page=1&filter=location:Den+Haag|price:150-2010"
     ];
 
-    // Render the grid of URLs with checkboxes
     function renderUrlGrid() {
       const grid = document.getElementById('urlGrid');
+      if (!grid) return;
       grid.innerHTML = urls
         .map((url, idx) => `
           <div class="url-item">
@@ -85,7 +83,6 @@
         .join('');
     }
 
-    // Open only the checked URLs in new tabs
     function openTabs() {
       document.querySelectorAll('.url-checkbox:checked').forEach(checkbox => {
         const url = checkbox.getAttribute('data-url');
@@ -94,8 +91,8 @@
       });
     }
 
-    // Initial render
-    renderUrlGrid();
+    // Ensures the DOM is loaded before rendering the grid
+    window.onload = renderUrlGrid;
   </script>
 </body>
 </html>
