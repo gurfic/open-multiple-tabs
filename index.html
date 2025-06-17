@@ -52,14 +52,27 @@
       border-radius: 3px;
       margin-right: 6px;
     }
-    /* Remove styles for .remove-btn and .add-btn as they are no longer used */
+    .select-btn {
+      background-color: #888888;
+      color: #fff;
+      font-size: 16px;
+      border: none;
+      border-radius: 6px;
+      padding: 8px 18px;
+      margin: 5px;
+      cursor: pointer;
+    }
+    .select-btn:hover {
+      background-color: #444444;
+    }
   </style>
 </head>
 <body>
-  <h2>Open Multiple Tabs</h2>
   <p>Click the button below to open your selected sites in new tabs (same browser).</p>
-  <button onclick="openTabs()">Open Selected Tabs</button>
+  <button onclick="openTabs()">Open URLs</button>
   <br />
+  <button class="select-btn" onclick="selectAll()">Select All</button>
+  <button class="select-btn" onclick="unselectAll()">Unselect All</button>
   <div id="urlGrid" class="url-grid"></div>
 
   <script>
@@ -113,6 +126,16 @@
           if (newWin) newWin.opener = null;
         }
       });
+    }
+
+    function selectAll() {
+      selected = Array(urls.length).fill(true);
+      renderGrid();
+    }
+
+    function unselectAll() {
+      selected = Array(urls.length).fill(false);
+      renderGrid();
     }
 
     // Initial render
