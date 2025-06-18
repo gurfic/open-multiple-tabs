@@ -56,6 +56,7 @@
       align-items: center;
       gap: 8px;
     }
+    /* Unified Blue Buttons */
     .btn-blue {
       padding: 12px 24px;
       font-size: 16px;
@@ -70,6 +71,7 @@
     .btn-blue:hover {
       background-color: #0056b3 !important;
     }
+    /* Grey Buttons */
     .btn-grey {
       padding: 12px 24px;
       font-size: 16px;
@@ -83,6 +85,7 @@
     .btn-grey:hover {
       background-color: #444444;
     }
+    /* Green Buttons */
     .btn-green {
       padding: 12px 24px;
       font-size: 16px;
@@ -96,6 +99,7 @@
     .btn-green:hover {
       background-color: #1e7e34;
     }
+    /* Red Remove Button */
     .btn-red {
       padding: 6px 16px;
       font-size: 14px;
@@ -109,19 +113,7 @@
     .btn-red:hover {
       background-color: #a71d2a;
     }
-    .saved-message {
-      color: #28a745;
-      font-size: 1.1em;
-      margin-left: 18px;
-      vertical-align: middle;
-      display: inline-block;
-      opacity: 1;
-      transition: opacity 0.7s;
-    }
-    .saved-message.hide {
-      opacity: 0;
-      transition: opacity 1s;
-    }
+    /* 2-column grid */
     .url-grid {
       display: grid;
       grid-template-columns: 1fr 1fr;
@@ -178,7 +170,6 @@
     <div class="url-toolbar">
       <button class="btn-blue" onclick="addUrl()">Add URL</button>
       <button class="btn-green" onclick="saveUrls()">Save URLs</button>
-      <span id="savedMsg" class="saved-message hide">Saved!</span>
     </div>
     <div class="url-grid-header">
       <div class="action-group-left">
@@ -193,7 +184,7 @@
     // Helper for persistence
     const LOCAL_STORAGE_KEY = "multi_urls_list";
 
-    // Initial URLs (this will be REPLACED when you update and commit this file)
+    // Initial URLs
     let initialUrls = [
       "https://www.pararius.com/appartamenti/den-haag/800-2000",
       "https://www.funda.nl/zoeken/kaart/huur?selected_area=%5B%22den-haag%22%5D",
@@ -285,42 +276,21 @@
       urls.push('');
       selected.push(true);
       renderGrid();
-      saveUrls();
+      saveUrls(); // Save after adding so it's also persistent
     }
 
     function saveUrls() {
       // Save to localStorage
       localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(urls));
-      // Also update initialUrls in memory (not persistent, but for copy-paste/manual update)
+      // Also update initialUrls in memory for future reloads (for user clarity, not needed for persistence)
       initialUrls = [...urls];
-
-      // Show "Saved!" message
-      const msg = document.getElementById('savedMsg');
-      msg.classList.remove('hide');
-      setTimeout(() => {
-        msg.classList.add('hide');
-      }, 1500);
-
-      // --- BACKEND save example ---
-      // If you have a backend endpoint, you could do:
-      // fetch('/api/save-urls', {method: 'POST', headers: {'Content-Type': 'application/json'}, body: JSON.stringify({urls})});
-      //
-      // For now, you need to update the HTML file in your repository manually by replacing the initialUrls array below with the following content:
-      // initialUrls = [
-      //   "URL1",
-      //   "URL2",
-      //   ...
-      // ];
-      //
-      // You can print this to the browser console for easy copy-paste:
-      console.info("Copy this block to replace the initialUrls in your HTML file:\n\ninitialUrls = [\n" + urls.map(u => '  "' + u.replace(/\\/g, '\\\\').replace(/"/g, '\\"') + '"').join(",\n") + "\n];\n");
     }
 
     function removeUrl(index) {
       urls.splice(index, 1);
       selected.splice(index, 1);
       renderGrid();
-      saveUrls();
+      saveUrls(); // Save after removal so it's persistent
     }
 
     // Initial render
