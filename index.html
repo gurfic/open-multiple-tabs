@@ -280,10 +280,25 @@
     }
 
     function saveUrls() {
-      // Save to localStorage
+      // Save to localStorage (optional, for offline use)
       localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(urls));
-      // Also update initialUrls in memory for future reloads (for user clarity, not needed for persistence)
+      // Update initialUrls in memory
       initialUrls = [...urls];
+    
+      // Send to backend
+      fetch('/api/save-urls', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ urls })
+      })
+      .then(response => response.json())
+      .then(data => {
+        alert('URLs saved to backend!');
+      })
+      .catch(error => {
+        alert('Error saving URLs to backend.');
+        console.error(error);
+      });
     }
 
     function removeUrl(index) {
