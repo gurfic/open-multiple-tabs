@@ -109,6 +109,19 @@
     .btn-red:hover {
       background-color: #a71d2a;
     }
+    .saved-message {
+      color: #28a745;
+      font-size: 1.1em;
+      margin-left: 18px;
+      vertical-align: middle;
+      display: inline-block;
+      opacity: 1;
+      transition: opacity 0.7s;
+    }
+    .saved-message.hide {
+      opacity: 0;
+      transition: opacity 1s;
+    }
     .url-grid {
       display: grid;
       grid-template-columns: 1fr 1fr;
@@ -140,31 +153,11 @@
       margin-right: 6px;
       min-width: 0;
     }
-    .save-message {
-      color: #28a745;
-      font-size: 1.12em;
-      margin: 0 0 10px 0;
-      font-weight: bold;
-      opacity: 0;
-      transition: opacity 0.3s;
-      height: 1.5em;
-      text-align: right;
-      width: 100%;
-      max-width: 700px;
-      margin-left: auto;
-      margin-right: auto;
-    }
-    .save-message.visible {
-      opacity: 1;
-    }
     .spacer {
       height: 36px;
     }
     @media (max-width: 900px) {
       .url-grid-container {
-        max-width: 98vw;
-      }
-      .save-message {
         max-width: 98vw;
       }
     }
@@ -175,20 +168,17 @@
       .page-title {
         font-size: 1.5em;
       }
-      .save-message {
-        font-size: 1em;
-      }
     }
   </style>
 </head>
 <body>
   <div class="page-title">Un appartement a la mer</div>
   <div class="spacer"></div>
-  <div id="saveMessage" class="save-message"></div>
   <div class="url-grid-container">
     <div class="url-toolbar">
       <button class="btn-blue" onclick="addUrl()">Add URL</button>
       <button class="btn-green" onclick="saveUrls()">Save URLs</button>
+      <span id="savedMsg" class="saved-message hide">Saved!</span>
     </div>
     <div class="url-grid-header">
       <div class="action-group-left">
@@ -203,7 +193,7 @@
     // Helper for persistence
     const LOCAL_STORAGE_KEY = "multi_urls_list";
 
-    // Initial URLs (will be programmatically updated by Copilot or CI in your repo)
+    // Initial URLs (this will be REPLACED when you update and commit this file)
     let initialUrls = [
       "https://www.pararius.com/appartamenti/den-haag/800-2000",
       "https://www.funda.nl/zoeken/kaart/huur?selected_area=%5B%22den-haag%22%5D",
@@ -295,38 +285,35 @@
       urls.push('');
       selected.push(true);
       renderGrid();
-      saveUrls(); // Save after adding so it's also persistent
+      saveUrls();
     }
 
     function saveUrls() {
-      // Save to localStorage for front-end persistence.
+      // Save to localStorage
       localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(urls));
+      // Also update initialUrls in memory (not persistent, but for copy-paste/manual update)
       initialUrls = [...urls];
-      showSaveMessage();
 
-      // --- Backend update: Send URLs to your backend to update the open-multiple-tabs.html file in the repository.
-      // Example (requires a server-side endpoint):
-      /*
-      fetch('/api/save-urls', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ urls })
-      })
-      .then(response => response.json())
-      .then(data => {
-        // Optionally show a message if backend save was successful
-      });
-      */
-    }
-
-    function showSaveMessage() {
-      const msgDiv = document.getElementById('saveMessage');
-      msgDiv.textContent = 'Saved!';
-      msgDiv.classList.add('visible');
+      // Show "Saved!" message
+      const msg = document.getElementById('savedMsg');
+      msg.classList.remove('hide');
       setTimeout(() => {
-        msgDiv.classList.remove('visible');
-        msgDiv.textContent = '';
-      }, 2000);
+        msg.classList.add('hide');
+      }, 1500);
+
+      // --- BACKEND save example ---
+      // If you have a backend endpoint, you could do:
+      // fetch('/api/save-urls', {method: 'POST', headers: {'Content-Type': 'application/json'}, body: JSON.stringify({urls})});
+      //
+      // For now, you need to update the HTML file in your repository manually by replacing the initialUrls array below with the following content:
+      // initialUrls = [
+      //   "URL1",
+      //   "URL2",
+      //   ...
+      // ];
+      //
+      // You can print this to the browser console for easy copy-paste:
+      console.info("Copy this block to replace the initialUrls in your HTML file:\n\ninitialUrls = [\n" + urls.map(u => '  "' + u.replace(/\\/g, '\\\\').replace(/"/g, '\\"') + '"').join(",\n") + "\n];\n");
     }
 
     function removeUrl(index) {
