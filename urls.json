@@ -1,1 +1,14 @@
-[]
+const fs = require('fs');
+const path = require('path');
+
+// Inside your Express POST handler:
+fs.writeFile(
+  path.join(__dirname, 'urls.json'), // This points to the file in the project root
+  JSON.stringify(urls, null, 2),     // Save the URLs array, nicely formatted
+  (err) => {
+    if (err) {
+      // Handle error
+    }
+    // Success!
+  }
+);
