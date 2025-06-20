@@ -4,7 +4,8 @@ const path = require('path');
 const app = express();
 const PORT = process.env.PORT || 3000;
 
-app.use(express.json());
+//app.use(express.json());
+app.use(express.static(__dirname)); // Serve files from current directory
 
 // Save URLs endpoint
 app.post('/api/save-urls', (req, res) => {
